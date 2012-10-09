@@ -127,7 +127,7 @@
             <type>standalone</type>
             <deployables>
                 <deployable>
-                    <groupId>com.rajnish</groupId>
+                    <groupId>com.mycompany</groupId>
                     <artifactId>site-war</artifactId>
                     <type>war</type>
                     <properties>
