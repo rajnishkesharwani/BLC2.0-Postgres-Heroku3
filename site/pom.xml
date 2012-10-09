@@ -14,9 +14,10 @@
 	<properties>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- httpsPort and httpPort	are used by embeded jetty server.-->
-		<!-- Make sure the following httpsPort matches what's in the runtime-properties file,  -->
-		<httpsPort>8443</httpsPort> 
+		<!-- httpsPort and httpPort are used by embeded jetty server. -->
+		<!-- Make sure the following httpsPort matches what's in the runtime-properties 
+			file, -->
+		<httpsPort>8443</httpsPort>
 		<httpPort>8080</httpPort>
 	</properties>
 	<build>
@@ -29,6 +30,82 @@
 				<configuration>
 					<webappDirectory>${webappDirectory}</webappDirectory>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>target/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<!-- This exclusion is only necessary in the site project and is for 
+								the Tomcat plugin that will be addressed a little later -->
+							<excludes>
+								<exclude>cargo/**</exclude>
+							</excludes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+					<excludeDefaultDirectories>true</excludeDefaultDirectories>
+				</configuration>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>install</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<container>
+						<containerId>tomcat7x</containerId>
+						<zipUrlInstaller>
+							<url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.29/bin/apache-tomcat-7.0.29.zip</url>
+						</zipUrlInstaller>
+						<dependencies>
+							<dependency>
+								<groupId>javax.activation</groupId>
+								<artifactId>activation</artifactId>
+							</dependency>
+							<dependency>
+								<groupId>javax.mail</groupId>
+								<artifactId>mail</artifactId>
+							</dependency>
+						</dependencies>
+					</container>
+					<configuration>
+						<type>standalone</type>
+						<deployables>
+							<deployable>
+								<groupId>com.mycompany</groupId>
+								<artifactId>site</artifactId>
+								<type>war</type>
+								<properties>
+									<context>ROOT</context>
+								</properties>
+							</deployable>
+						</deployables>
+					</configuration>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>install</goal>
+							<goal>configure</goal>
+							<goal>deploy</goal>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -43,10 +120,11 @@
 					<connectors>
 						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
 							<port>${httpPort}</port>
-							
+
 							<maxIdleTime>60000</maxIdleTime>
 						</connector>
-						<connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+						<connector
+							implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
 							<port>${httpsPort}</port>
 							<keystore>${webappDirectory}/WEB-INF/blc-example.keystore</keystore>
 							<keyPassword>broadleaf</keyPassword>
@@ -55,7 +133,7 @@
 					</connectors>
 				</configuration>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>keytool-maven-plugin</artifactId>
@@ -85,7 +163,7 @@
 					<keyalg>RSA</keyalg>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.zeroturnaround</groupId>
 				<artifactId>javarebel-maven-plugin</artifactId>
@@ -103,52 +181,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-    <groupId>org.codehaus.cargo</groupId>
-    <artifactId>cargo-maven2-plugin</artifactId>
-    <configuration>
-        <container>
-            <containerId>tomcat6x</containerId>
-            <zipUrlInstaller>
-                <url>http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.18/bin/apache-tomcat-6.0.18.zip</url>
-            </zipUrlInstaller>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>activation</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </dependency>
-            </dependencies>
-        </container>
-        <configuration>
-            <type>standalone</type>
-            <deployables>
-                <deployable>
-                    <groupId>com.mycompany</groupId>
-                    <artifactId>site-war</artifactId>
-                    <type>war</type>
-                    <properties>
-                        <context>ROOT</context>
-                    </properties>
-                </deployable>
-            </deployables>
-        </configuration>
-    </configuration>
-    <executions>
-        <execution>
-            <phase>package</phase>
-            <goals>
-                <goal>install</goal>
-                <goal>configure</goal>
-                <goal>deploy</goal>
-                <goal>package</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -160,10 +192,10 @@
 			<groupId>org.broadleafcommerce</groupId>
 			<artifactId>broadleaf-framework-web</artifactId>
 		</dependency>
-<dependency>
-    <groupId>postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
@@ -176,10 +208,5 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		<dependency>
-	<groupId>org.codehaus.cargo</groupId>
-	<artifactId>cargo-maven2-plugin</artifactId>
-	<version>1.2.4</version>
-</dependency>
 	</dependencies>
 </project>
