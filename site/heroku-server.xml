@@ -1,5 +1,5 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
- --><!-- This is needed in order to tell Tomcat to start up on the dynamic port pass in via the Procfile -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is needed in order to tell Tomcat to start up on the dynamic port pass in via the Procfile -->
 <!-- <Server port="-1"> 
     <Listener className="org.apache.catalina.core.JasperListener" /> 
     <Service name="Catalina"> 
@@ -10,7 +10,7 @@
         </Engine>
     </Service> 
 </Server> -->
-<?xml version="1.0" encoding="utf-8" standalone="no"?><!--
+<!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
   this work for additional information regarding copyright ownership.
