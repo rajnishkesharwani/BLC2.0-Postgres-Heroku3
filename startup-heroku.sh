@@ -12,7 +12,7 @@ rm -rf $CATALINA_BASE/manager
 
 #copy over the Heroku config files
 cp ./site/heroku-server.xml $CATALINA_BASE/conf/server.xml
-cp /app/.kestore $CATALINA_BASE/conf/
+cp ./.kestore $CATALINA_BASE/conf/
 
 #make the Tomcat scripts executable
 chmod a+x ./site/target/cargo/installs/apache-tomcat-7.0.29/apache-tomcat-7.0.29/bin/*.sh
